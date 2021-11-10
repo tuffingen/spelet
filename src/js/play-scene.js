@@ -55,22 +55,22 @@ class PlayScene extends Phaser.Scene {
         this.text.setScrollFactor(0);
         this.updateText();
 
-        this.input.once('pointerup', function () {
-            this.scene.pause();
-            this.scene.launch('MenuScene');
-
-        }, this);
+        this.keyObj = this.input.keyboard.addKey('W', true, false);
 
         this.events.on('pause', function () {
             console.log('Scene A paused');
-        })
+        });
 
         this.events.on('resume', function () {
             console.log('Scene A resumed');
-        })
+        });
     }
 
     update() {
+        if (this.keyObj.isDown) {
+            this.scene.pause();
+            this.scene.launch('MenuScene');
+        }
         this.physics.add.collider(this.player, this.platforms);
         // Control the player with left or right keys
         if (this.cursors.left.isDown) {

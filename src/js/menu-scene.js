@@ -4,11 +4,13 @@ class PreloadScene extends Phaser.Scene {
     }
 
     create() {
-        this.input.once('pointerdown', function () {
+        this.keyObj = this.input.keyboard.addKey('W', true, false);
+    }
 
+    update() {
+        if (this.keyObj.isDown) {
             this.scene.resume('PlayScene');
-
-        }, this);
+        }
     }
 }
 

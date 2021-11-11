@@ -54,7 +54,7 @@ Själva spelet laddas in från index.html(byggs från index.njk). Phaser laddas 
 [API docs](https://newdocs.phaser.io/docs/3.55.2)
 [Phaser3 notes](https://rexrainbow.github.io/phaser3-rex-notes/docs/site/)
 
-Tutorials och annat, se [classroom](https://classroom.google.com/u/0/).
+Tutorials och annat, se [classroom](https://classroom.google.com/).
 ## Uppdelning
 
 Till skillnad från tidigare exempel vi tittat på för Phaser så är nu spelet uppdelat i olika filer och skrivet med [ES6 klasser](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes?retiredLocale=sv-SE). 
@@ -109,6 +109,7 @@ Klicka runt, kolla. Ladda [tilemap filen](src/assets/tilemaps/level1.json).
 Delar av det vi gör och grunden som estetklassen arbetat med är hämtat från denna [tutorial](https://stackabuse.com/phaser-3-and-tiled-building-a-platformer/).
 Vill du veta mer om Tiled och hur en tilemap skapas så kolla igenom den.
 
+Filer finns på [classroom](https://classroom.google.com/).
 ## Tilemaps
 
 Filerna som skapas från Tiled, tilemaps sparas sedan som [JSON](https://www.json.org/json-en.html) och kan laddas in i Phaser.

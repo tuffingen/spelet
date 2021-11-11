@@ -4,17 +4,28 @@ class PlayScene extends Phaser.Scene {
     }
 
     create() {
-        const backgroundImage = this.add
-            .image(0, 0, 'background')
-            .setOrigin(0, 0);
+        // variabel för att hålla koll på hur många gånger vi spikat oss själva
+        this.spiked = 0;
 
+        // ladda spelets bakgrundsbild, statisk
+        // setOrigin behöver användas för att den ska ritas från top left
+        this.add.image(0, 0, 'background').setOrigin(0, 0);
+
+        // skapa en tilemap från JSON filen vi preloadade
         const map = this.make.tilemap({ key: 'map' });
+        // ladda in tilesetbilden till vår tilemap
         const tileset = map.addTilesetImage('jefrens_platformer', 'tiles');
 
+        // initiera animationer, detta är flyttat till en egen metod
+        // för att göra create metoden mindre rörig
         this.initAnims();
 
+        // keyboard cursors
         this.cursors = this.input.keyboard.createCursorKeys();
 
+        // Ladda lagret Platforms från tilemappen
+        // och skapa dessa
+        // sätt collisionen
         this.platforms = map.createLayer('Platforms', tileset);
         this.platforms.setCollisionByExclusion(-1, true);
         // platforms.setCollisionByProperty({ collides: true });
@@ -24,16 +35,25 @@ class PlayScene extends Phaser.Scene {
         //     this.platforms
         // );
         // platforms.setCollision(1, true, true);
+
+        // skapa en spelare och ge den studs
         this.player = this.physics.add.sprite(50, 300, 'player');
         this.player.setBounce(0.1);
         this.player.setCollideWorldBounds(true);
 
-        console.log(this.platforms);
+        // skapa en fysik-grupp
         this.spikes = this.physics.add.group({
             allowGravity: false,
             immovable: true
         });
+
+        // från platforms som skapats från tilemappen
+        // kan vi ladda in andra lager
+        // i tilemappen finns det ett lager Spikes
+        // som innehåller spikarnas position
+        console.log(this.platforms);
         map.getObjectLayer('Spikes').objects.forEach((spike) => {
+            // iterera över spikarna, skapa spelobjekt
             const spikeSprite = this.spikes
                 .create(spike.x, spike.y - spike.height, 'spike')
                 .setOrigin(0);
@@ -41,6 +61,8 @@ class PlayScene extends Phaser.Scene {
                 .setSize(spike.width, spike.height - 20)
                 .setOffset(0, 20);
         });
+        // lägg till en collider mellan spelare och spik
+        // om en kollision sker, kör callback metoden playerHit
         this.physics.add.collider(
             this.player,
             this.spikes,
@@ -48,6 +70,12 @@ class PlayScene extends Phaser.Scene {
             null,
             this
         );
+
+        // krocka med platforms lagret
+        this.physics.add.collider(this.player, this.platforms);
+
+        // skapa text på spelet, texten är tom
+        // textens innehåll sätts med updateText() metoden
         this.text = this.add.text(16, 16, '', {
             fontSize: '20px',
             fill: '#ffffff'
@@ -55,23 +83,29 @@ class PlayScene extends Phaser.Scene {
         this.text.setScrollFactor(0);
         this.updateText();
 
+        // lägg till en keyboard input för W
         this.keyObj = this.input.keyboard.addKey('W', true, false);
 
+        // exempel för att lyssna på events
         this.events.on('pause', function () {
-            console.log('Scene A paused');
+            console.log('Play scene paused');
         });
-
         this.events.on('resume', function () {
-            console.log('Scene A resumed');
+            console.log('Play scene resumed');
         });
     }
 
+    // play scenens update metod
     update() {
+        // för pause
         if (this.keyObj.isDown) {
+            // pausa nuvarande scen
             this.scene.pause();
+            // starta menyscenene
             this.scene.launch('MenuScene');
         }
-        this.physics.add.collider(this.player, this.platforms);
+
+        // följande kod är från det tutorial ni gjort tidigare
         // Control the player with left or right keys
         if (this.cursors.left.isDown) {
             this.player.setVelocityX(-200);
@@ -111,26 +145,32 @@ class PlayScene extends Phaser.Scene {
         }
     }
 
+    // metoden updateText för att uppdatera overlaytexten i spelet
     updateText() {
-        this.text.setText('Arrow keys to move. Space to jump');
+        this.text.setText(
+            `Arrow keys to move. Space to jump. W to pause. Spiked: ${this.spiked}`
+        );
     }
 
+    // när spelaren landar på en spik, då körs följande metod
     playerHit(player, spike) {
-        console.log('player hit');
+        this.spiked++;
         player.setVelocity(0, 0);
         player.setX(50);
         player.setY(300);
         player.play('idle', true);
-        player.setAlpha(0);
         let tw = this.tweens.add({
             targets: player,
-            alpha: 1,
+            alpha: { start: 0, to: 1 },
+            tint: { start: 0xff0000, to: 0xffffff },
             duration: 100,
             ease: 'Linear',
             repeat: 5
         });
+        this.updateText();
     }
 
+    // när vi skapar scenen så körs initAnims för att ladda spelarens animationer
     initAnims() {
         this.anims.create({
             key: 'walk',

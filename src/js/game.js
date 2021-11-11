@@ -1,7 +1,9 @@
+// importera alla scener
 import PlayScene from './play-scene';
 import PreloadScene from './preload-scene';
 import MenuScene from './menu-scene';
 
+// spelets config
 const config = {
     type: Phaser.AUTO,
     width: 896,
@@ -19,4 +21,5 @@ const config = {
     parent: 'game'
 };
 
+// initiera spelet
 new Phaser.Game(config);

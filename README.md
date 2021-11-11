@@ -104,6 +104,11 @@ Ladda ned och installera.
 
 Klicka runt, kolla. Ladda [tilemap filen](src/assets/tilemaps/level1.json).
 
+## Tutorial
+
+Delar av det vi gör och grunden som estetklassen arbetat med är hämtat från denna [tutorial](https://stackabuse.com/phaser-3-and-tiled-building-a-platformer/).
+Vill du veta mer om Tiled och hur en tilemap skapas så kolla igenom den.
+
 ## Tilemaps
 
 Filerna som skapas från Tiled, tilemaps sparas sedan som [JSON](https://www.json.org/json-en.html) och kan laddas in i Phaser.

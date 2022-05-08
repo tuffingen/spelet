@@ -9,12 +9,13 @@ class PlayScene extends Phaser.Scene {
 
         // ladda spelets bakgrundsbild, statisk
         // setOrigin behöver användas för att den ska ritas från top left
-        this.add.image(0, 0, 'background').setOrigin(0, 0);
+       // this.add.image(0, 0, 'background').setOrigin(0, 0);
 
         // skapa en tilemap från JSON filen vi preloadade
         const map = this.make.tilemap({ key: 'map' });
         // ladda in tilesetbilden till vår tilemap
-        const tileset = map.addTilesetImage('jefrens_platformer', 'tiles');
+        const tileset = map.addTilesetImage('platforms', 'tiles');
+        
 
         // initiera animationer, detta är flyttat till en egen metod
         // för att göra create metoden mindre rörig
@@ -26,7 +27,10 @@ class PlayScene extends Phaser.Scene {
         // Ladda lagret Platforms från tilemappen
         // och skapa dessa
         // sätt collisionen
-        this.platforms = map.createLayer('Platforms', tileset);
+        map.createLayer('berg', tileset);   
+        map.createLayer('background', tileset);
+        map.createLayer('grass', tileset);
+        this.platforms = map.createLayer('platforms', tileset);
         this.platforms.setCollisionByExclusion(-1, true);
         // platforms.setCollisionByProperty({ collides: true });
         // this.platforms.setCollisionFromCollisionGroup(
@@ -52,7 +56,7 @@ class PlayScene extends Phaser.Scene {
         // i tilemappen finns det ett lager Spikes
         // som innehåller spikarnas position
         console.log(this.platforms);
-        map.getObjectLayer('Spikes').objects.forEach((spike) => {
+      /*  map.getObjectLayer('Spikes').objects.forEach((spike) => {
             // iterera över spikarna, skapa spelobjekt
             const spikeSprite = this.spikes
                 .create(spike.x, spike.y - spike.height, 'spike')
@@ -60,7 +64,7 @@ class PlayScene extends Phaser.Scene {
             spikeSprite.body
                 .setSize(spike.width, spike.height - 20)
                 .setOffset(0, 20);
-        });
+        });*/
         // lägg till en collider mellan spelare och spik
         // om en kollision sker, kör callback metoden playerHit
         this.physics.add.collider(
